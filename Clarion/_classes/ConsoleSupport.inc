@@ -1,6 +1,5 @@
 _ConsoleSupport_ EQUATE(1)
 
-  INCLUDE('LoadLibClass.inc'),ONCE
 
 HANDLE      EQUATE(UNSIGNED)
 DWORD       EQUATE(ULONG)
@@ -31,7 +30,6 @@ ATTACH_PARENT_PROCESS       EQUATE(-1)
 
 ConsoleSupport        Class(),Type,Module('ConsoleSupport.Clw'),LINK('ConsoleSupport.Clw',1)
 ! Properties
-_LoadLib                &LoadLibClass
 
 InputHandle Handle
 OutputHandle        Handle

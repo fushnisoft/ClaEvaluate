@@ -9,7 +9,6 @@ fpAttachConsole LONG,NAME('AttachConsole')
             GetLastError(),DWORD,PASCAL
  
             ! Console functions
-            AllocConsole(),BYTE,PASCAL,RAW
             GetStdHandle(DWORD),HANDLE,PASCAL,PROC,RAW
             WriteConsole(Handle,Long,Dword,long,long),bool,Raw,Pascal,name('WriteConsoleA')
             WriteFile(Handle,Long,Dword,long,long),bool,Raw,Pascal,name('WriteFile')
@@ -20,9 +19,6 @@ fpAttachConsole LONG,NAME('AttachConsole')
             SetConsoleMode(Handle,dWord),BOOL,RAW,PASCAL
             GetConsoleMode(Handle,Long),BOOL,RAW,PASCAL
         End
-        MODULE('kernel32')
-AttachConsole  PROCEDURE(LONG),BYTE,PASCAL,RAW,DLL(1)
-         END
       End
 
 ConsoleSupport.Construct PROCEDURE
@@ -35,31 +31,7 @@ ConsoleSupport.Destruct PROCEDURE
 
 ConsoleSupport.Init				   PROCEDURE () !,BYTE,VIRTUAL 
   CODE
-  IF NOT SELF._LoadLib &= NULL
-    IF SELF._LoadLib.LibraryLoaded()
-      SELF._LoadLib.LlcFreeLibrary()
-    END
-    Dispose(SELF._LoadLib)
-  END
-  SELF._LoadLib &= NEW LoadLibClass
-  IF NOT SELF._LoadLib &= NULL
-    IF SELF._LoadLib.LlcLoadLibrary('kernel32.dll') <> SUCCESS
-      Halt(1,'_LoadLib.LlcLoadLibrary failed (' & GetLastError() & ')')
-      RETURN INVALID_HANDLE_VALUE
-    END
-    IF SELF._LoadLib.LibraryLoaded()
-      fpAttachConsole = SELF._LoadLib.LlcGetProcAddress('AttachConsole')
-    END
-  END
 
-    ! IF AllocConsole() <> 0
-    !     Halt(1,'AllocConsole failed (' & GetLastError() & ')')
-    !     RETURN INVALID_HANDLE_VALUE
-    ! END
-    ! IF AttachConsole(-1) <> 0
-    !     Halt(1,'AttachConsole failed (' & GetLastError() & ')')
-    !     RETURN INVALID_HANDLE_VALUE
-    ! END
     SELF.OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE)
     If SELF.OutputHandle = INVALID_HANDLE_VALUE
         Halt(1,'Unable to get output handle (' & GetLastError() & ')')
