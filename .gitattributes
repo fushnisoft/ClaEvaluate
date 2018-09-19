@@ -33,3 +33,5 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+# Force Linguist support for Clarion inc files
+*.inc linguist-language=Clarion
